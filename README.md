@@ -12,6 +12,34 @@ Microsoft Teams Bot and Direct API integration with Databricks Genie that preser
 
 See [docs/03_USP_UNIQUE_SELLING_PROPOSITION.md](docs/03_USP_UNIQUE_SELLING_PROPOSITION.md) for detailed explanation.
 
+## Token Exchange Reference
+
+The core implementation is in `src/genie_api_obo_rls/core/token_exchange.py`. The important detail is that the exchange uses the **Databricks account-level token endpoint** and intentionally does **not** send `client_id` or `client_secret`.
+
+That is what preserves the signed-in user's identity:
+
+```python
+url = f"https://accounts.azuredatabricks.net/oidc/accounts/{account_id}/v1/token"
+
+data = {
+    "grant_type": "urn:ietf:params:oauth:grant-type:token-exchange",
+    "subject_token": aad_token,
+    "subject_token_type": "urn:ietf:params:oauth:token-type:jwt",
+    "scope": "all-apis",
+}
+
+response = requests.post(
+    url,
+    data=data,
+    headers={"Content-Type": "application/x-www-form-urlencoded"},
+    timeout=30,
+)
+```
+
+Do not add `client_id` or `client_secret` to this request. Including either changes the exchange pattern toward service-principal identity, which breaks the intended Unity Catalog behavior where `current_user()` resolves to the end user and RLS policies apply to that user.
+
+The full Teams/API flow uses the same pattern through `exchange_aad_for_databricks_token_async()` in `src/genie_api_obo_rls/auth.py`.
+
 ## Features
 
 - **Natural Language Queries** - Ask Genie questions through Teams or API
