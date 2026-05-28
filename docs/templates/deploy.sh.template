@@ -1,0 +1,197 @@
+#!/bin/bash
+# =============================================================================
+# Genie API OBO RLS - Azure Deployment Script Template
+# =============================================================================
+# 
+# USAGE:
+#   1. Copy this file: cp deploy.sh.template deploy.sh
+#   2. Fill in the variables below
+#   3. Make executable: chmod +x deploy.sh
+#   4. Run: ./deploy.sh
+#
+# =============================================================================
+
+set -e
+
+# =============================================================================
+# CONFIGURATION - FILL THESE IN
+# =============================================================================
+
+# Azure Configuration
+RESOURCE_GROUP="rg-genie-prod"
+LOCATION="eastus"
+APP_SERVICE_PLAN="asp-genie-prod"
+APP_SERVICE_NAME="genie-api-obo-rls"
+
+# App Service Configuration
+PYTHON_VERSION="3.11"
+SKU="B2"  # B2 minimum recommended, P2v3 for production
+
+# Bot Framework Configuration
+MICROSOFT_APP_ID="REPLACE_ME"
+MICROSOFT_APP_PASSWORD="REPLACE_ME"
+MICROSOFT_APP_TENANT_ID="REPLACE_ME"
+OAUTH_CONNECTION_NAME="databricks-sso"
+
+# Databricks Configuration
+DATABRICKS_HOST="https://REPLACE_ME.azuredatabricks.net"
+GENIE_SPACE_ID="REPLACE_ME"
+DATABRICKS_ACCOUNT_ID="REPLACE_ME"
+
+# Optional: Application Insights
+APP_INSIGHTS_CONNECTION_STRING=""
+
+# Optional: Key Vault
+KEY_VAULT_URL=""
+
+# Optional: Redis (for multi-instance)
+REDIS_URL=""
+
+# =============================================================================
+# SCRIPT - DO NOT MODIFY BELOW THIS LINE
+# =============================================================================
+
+echo "=========================================="
+echo "Genie API OBO RLS - Azure Deployment"
+echo "=========================================="
+echo ""
+
+# Validate required variables
+if [[ "$MICROSOFT_APP_ID" == "REPLACE_ME" ]]; then
+    echo "ERROR: Please fill in the configuration variables"
+    exit 1
+fi
+
+# 1. Create Resource Group
+echo "1. Creating resource group..."
+az group create \
+    --name "$RESOURCE_GROUP" \
+    --location "$LOCATION" \
+    --output none
+
+# 2. Create App Service Plan
+echo "2. Creating App Service Plan..."
+az appservice plan create \
+    --name "$APP_SERVICE_PLAN" \
+    --resource-group "$RESOURCE_GROUP" \
+    --sku "$SKU" \
+    --is-linux \
+    --output none
+
+# 3. Create Web App
+echo "3. Creating Web App..."
+az webapp create \
+    --name "$APP_SERVICE_NAME" \
+    --resource-group "$RESOURCE_GROUP" \
+    --plan "$APP_SERVICE_PLAN" \
+    --runtime "PYTHON:$PYTHON_VERSION" \
+    --output none
+
+# 4. Enable HTTPS only
+echo "4. Configuring security settings..."
+az webapp update \
+    --name "$APP_SERVICE_NAME" \
+    --resource-group "$RESOURCE_GROUP" \
+    --https-only true \
+    --output none
+
+az webapp config set \
+    --name "$APP_SERVICE_NAME" \
+    --resource-group "$RESOURCE_GROUP" \
+    --min-tls-version 1.2 \
+    --output none
+
+# 5. Configure environment variables
+echo "5. Setting environment variables..."
+az webapp config appsettings set \
+    --name "$APP_SERVICE_NAME" \
+    --resource-group "$RESOURCE_GROUP" \
+    --settings \
+        MICROSOFT_APP_ID="$MICROSOFT_APP_ID" \
+        MICROSOFT_APP_PASSWORD="$MICROSOFT_APP_PASSWORD" \
+        MICROSOFT_APP_TENANT_ID="$MICROSOFT_APP_TENANT_ID" \
+        OAUTH_CONNECTION_NAME="$OAUTH_CONNECTION_NAME" \
+        GENIE_DATABRICKS_HOST="$DATABRICKS_HOST" \
+        GENIE_GENIE_SPACE_ID="$GENIE_SPACE_ID" \
+        DATABRICKS_ACCOUNT_ID="$DATABRICKS_ACCOUNT_ID" \
+        GENIE_CACHE_TTL_SECONDS="300" \
+        APPLICATIONINSIGHTS_CONNECTION_STRING="$APP_INSIGHTS_CONNECTION_STRING" \
+        AZURE_KEYVAULT_URL="$KEY_VAULT_URL" \
+        REDIS_URL="$REDIS_URL" \
+    --output none
+
+# 6. Configure startup command
+echo "6. Configuring startup command..."
+az webapp config set \
+    --name "$APP_SERVICE_NAME" \
+    --resource-group "$RESOURCE_GROUP" \
+    --startup-file "startup.sh" \
+    --output none
+
+# 7. Deploy code
+echo "7. Creating deployment package..."
+cd "$(dirname "$0")/.."  # Go to project root
+
+# Create zip excluding unnecessary files
+zip -r deploy.zip . \
+    -x "*.git*" \
+    -x "*__pycache__*" \
+    -x "*.env" \
+    -x "*.pyc" \
+    -x "*.pyo" \
+    -x "docs_v2/*" \
+    -x "tests/*" \
+    -x "*.md" \
+    -x "deploy.sh"
+
+echo "8. Deploying to Azure..."
+az webapp deploy \
+    --name "$APP_SERVICE_NAME" \
+    --resource-group "$RESOURCE_GROUP" \
+    --src-path deploy.zip \
+    --type zip \
+    --output none
+
+# Clean up
+rm deploy.zip
+
+# 9. Enable Managed Identity (for Key Vault access)
+echo "9. Enabling Managed Identity..."
+az webapp identity assign \
+    --name "$APP_SERVICE_NAME" \
+    --resource-group "$RESOURCE_GROUP" \
+    --output none
+
+# 10. Verify deployment
+echo "10. Verifying deployment..."
+sleep 30  # Wait for app to start
+
+APP_URL="https://$APP_SERVICE_NAME.azurewebsites.net"
+HEALTH_RESPONSE=$(curl -s "$APP_URL/healthz")
+
+if [[ "$HEALTH_RESPONSE" == *"ok"* ]]; then
+    echo ""
+    echo "=========================================="
+    echo "✅ Deployment successful!"
+    echo "=========================================="
+    echo ""
+    echo "App URL: $APP_URL"
+    echo "Health Check: $APP_URL/healthz"
+    echo "Bot Endpoint: $APP_URL/api/messages"
+    echo ""
+    echo "Next steps:"
+    echo "1. Configure Bot Service messaging endpoint: $APP_URL/api/messages"
+    echo "2. Test in Teams or Web Chat"
+    echo ""
+else
+    echo ""
+    echo "=========================================="
+    echo "⚠️  Deployment may have issues"
+    echo "=========================================="
+    echo ""
+    echo "Health check response: $HEALTH_RESPONSE"
+    echo ""
+    echo "Check logs with:"
+    echo "az webapp log tail --name $APP_SERVICE_NAME --resource-group $RESOURCE_GROUP"
+    echo ""
+fi

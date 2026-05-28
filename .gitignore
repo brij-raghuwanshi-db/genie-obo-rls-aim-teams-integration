@@ -1,0 +1,56 @@
+# Environment and secrets
+.env
+*.env
+.env.*
+config/env.local
+secrets/
+
+# Local environments and agent/editor state
+.venv/
+.venv_test/
+.cursor/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+web_log_*
+webapp_logs/
+
+# Deployment artifacts
+deploy*.zip
+*.tar.gz
+
+# Sensitive/generated cloud exports
+archive/
+azure_resources_export/
+
+# Local scratch notes
+test.md
+
+# OS
+.DS_Store
+Thumbs.db
