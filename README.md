@@ -120,6 +120,7 @@ genie_api_obo_rls/
 | [docs/09_AZURE_WEBAPP_READINESS_CHECKLIST.md](docs/09_AZURE_WEBAPP_READINESS_CHECKLIST.md) | Deployment readiness checklist |
 | [docs/10_ENVIRONMENT_VARIABLES.md](docs/10_ENVIRONMENT_VARIABLES.md) | Complete environment variable reference |
 | [docs/11_API_REFERENCE.md](docs/11_API_REFERENCE.md) | REST API reference |
+| [docs/13_FAQ.md](docs/13_FAQ.md) | Customer-facing FAQ on source code, Azure Web App, admin tasks, and token claims |
 
 ## Key API Endpoints
 

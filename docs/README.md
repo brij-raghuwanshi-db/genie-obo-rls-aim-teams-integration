@@ -10,44 +10,46 @@ This directory contains comprehensive documentation for the Genie API OBO RLS se
 
 | # | Document | Description |
 |---|----------|-------------|
-| 01 | [ARCHITECTURE.md](01_ARCHITECTURE.md) | System architecture, data flows, component diagrams |
-| 02 | [COMPLETE_IMPLEMENTATION_GUIDE.md](02_COMPLETE_IMPLEMENTATION_GUIDE.md) | Step-by-step deployment instructions |
-| 03 | [USP_UNIQUE_SELLING_PROPOSITION.md](03_USP_UNIQUE_SELLING_PROPOSITION.md) | Core innovation - user identity preservation |
-| 04 | [DRAWBACKS_AND_LIMITATIONS.md](04_DRAWBACKS_AND_LIMITATIONS.md) | Honest assessment of limitations |
-| 05 | [ENTERPRISE_FEASIBILITY.md](05_ENTERPRISE_FEASIBILITY.md) | Production readiness analysis |
-| 06 | [SECURITY_AUDIT.md](06_SECURITY_AUDIT.md) | Security assessment and recommendations |
-| 07 | [CURRENT_FEATURES.md](07_CURRENT_FEATURES.md) | Complete feature list |
-| 08 | [TEAMS_WEBCHAT_USER_GUIDE.md](08_TEAMS_WEBCHAT_USER_GUIDE.md) | End-user guide for Teams/Web Chat |
-| 09 | [AZURE_WEBAPP_READINESS_CHECKLIST.md](09_AZURE_WEBAPP_READINESS_CHECKLIST.md) | Deployment readiness checklist |
-| 10 | [ENVIRONMENT_VARIABLES.md](10_ENVIRONMENT_VARIABLES.md) | Complete environment variable reference |
-| 11 | [API_REFERENCE.md](11_API_REFERENCE.md) | REST API documentation |
-| 12 | [TROUBLESHOOTING.md](12_TROUBLESHOOTING.md) | Common issues and solutions |
+| 01 | [01_ARCHITECTURE.md](01_ARCHITECTURE.md) | System architecture, data flows, component diagrams |
+| 02 | [02_COMPLETE_IMPLEMENTATION_GUIDE.md](02_COMPLETE_IMPLEMENTATION_GUIDE.md) | Step-by-step deployment instructions |
+| 03 | [03_USP_UNIQUE_SELLING_PROPOSITION.md](03_USP_UNIQUE_SELLING_PROPOSITION.md) | Core innovation - user identity preservation |
+| 04 | [04_DRAWBACKS_AND_LIMITATIONS.md](04_DRAWBACKS_AND_LIMITATIONS.md) | Honest assessment of limitations |
+| 05 | [05_ENTERPRISE_FEASIBILITY.md](05_ENTERPRISE_FEASIBILITY.md) | Production readiness analysis |
+| 06 | [06_SECURITY_AUDIT.md](06_SECURITY_AUDIT.md) | Security assessment and recommendations |
+| 07 | [07_CURRENT_FEATURES.md](07_CURRENT_FEATURES.md) | Complete feature list |
+| 08 | [08_TEAMS_WEBCHAT_USER_GUIDE.md](08_TEAMS_WEBCHAT_USER_GUIDE.md) | End-user guide for Teams/Web Chat |
+| 09 | [09_AZURE_WEBAPP_READINESS_CHECKLIST.md](09_AZURE_WEBAPP_READINESS_CHECKLIST.md) | Deployment readiness checklist |
+| 10 | [10_ENVIRONMENT_VARIABLES.md](10_ENVIRONMENT_VARIABLES.md) | Complete environment variable reference |
+| 11 | [11_API_REFERENCE.md](11_API_REFERENCE.md) | REST API documentation |
+| 12 | [12_TROUBLESHOOTING.md](12_TROUBLESHOOTING.md) | Common issues and solutions |
+| 13 | [13_FAQ.md](13_FAQ.md) | Customer-facing FAQ |
 
 ---
 
 ## Quick Start
 
 ### For Developers
-1. Read [ARCHITECTURE.md](01_ARCHITECTURE.md) for system overview
-2. Follow [COMPLETE_IMPLEMENTATION_GUIDE.md](02_COMPLETE_IMPLEMENTATION_GUIDE.md) for deployment
-3. Reference [API_REFERENCE.md](11_API_REFERENCE.md) for integration
+1. Read [01_ARCHITECTURE.md](01_ARCHITECTURE.md) for system overview
+2. Follow [02_COMPLETE_IMPLEMENTATION_GUIDE.md](02_COMPLETE_IMPLEMENTATION_GUIDE.md) for deployment
+3. Reference [11_API_REFERENCE.md](11_API_REFERENCE.md) for integration
 
 ### For Operations
-1. Review [AZURE_WEBAPP_READINESS_CHECKLIST.md](09_AZURE_WEBAPP_READINESS_CHECKLIST.md) before deployment
-2. Configure using [ENVIRONMENT_VARIABLES.md](10_ENVIRONMENT_VARIABLES.md)
-3. Use [TROUBLESHOOTING.md](12_TROUBLESHOOTING.md) for issue resolution
+1. Review [09_AZURE_WEBAPP_READINESS_CHECKLIST.md](09_AZURE_WEBAPP_READINESS_CHECKLIST.md) before deployment
+2. Configure using [10_ENVIRONMENT_VARIABLES.md](10_ENVIRONMENT_VARIABLES.md)
+3. Use [12_TROUBLESHOOTING.md](12_TROUBLESHOOTING.md) for issue resolution
 
 ### For Security Teams
-1. Review [SECURITY_AUDIT.md](06_SECURITY_AUDIT.md) for findings
-2. Understand [USP_UNIQUE_SELLING_PROPOSITION.md](03_USP_UNIQUE_SELLING_PROPOSITION.md) for RLS design
+1. Review [06_SECURITY_AUDIT.md](06_SECURITY_AUDIT.md) for findings
+2. Understand [03_USP_UNIQUE_SELLING_PROPOSITION.md](03_USP_UNIQUE_SELLING_PROPOSITION.md) for RLS design
 
 ### For Business Stakeholders
-1. Read [USP_UNIQUE_SELLING_PROPOSITION.md](03_USP_UNIQUE_SELLING_PROPOSITION.md) for value proposition
-2. Review [ENTERPRISE_FEASIBILITY.md](05_ENTERPRISE_FEASIBILITY.md) for production readiness
-3. Understand [DRAWBACKS_AND_LIMITATIONS.md](04_DRAWBACKS_AND_LIMITATIONS.md) for limitations
+1. Read [03_USP_UNIQUE_SELLING_PROPOSITION.md](03_USP_UNIQUE_SELLING_PROPOSITION.md) for value proposition
+2. Review [05_ENTERPRISE_FEASIBILITY.md](05_ENTERPRISE_FEASIBILITY.md) for production readiness
+3. Understand [04_DRAWBACKS_AND_LIMITATIONS.md](04_DRAWBACKS_AND_LIMITATIONS.md) for limitations
+4. Review [13_FAQ.md](13_FAQ.md) for customer Q&A
 
 ### For End Users
-1. Follow [TEAMS_WEBCHAT_USER_GUIDE.md](08_TEAMS_WEBCHAT_USER_GUIDE.md) for usage instructions
+1. Follow [08_TEAMS_WEBCHAT_USER_GUIDE.md](08_TEAMS_WEBCHAT_USER_GUIDE.md) for usage instructions
 
 ---
 
@@ -135,7 +137,7 @@ curl https://genie-api.azurewebsites.net/healthz
 
 ## Support
 
-For issues not covered in [TROUBLESHOOTING.md](12_TROUBLESHOOTING.md):
+For issues not covered in [12_TROUBLESHOOTING.md](12_TROUBLESHOOTING.md):
 
 1. Check Azure service health
 2. Review Application Insights logs
